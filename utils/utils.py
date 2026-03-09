@@ -59,10 +59,10 @@ def decomposition_primaire(nombre:int):
             resultat.append([premier, compteur])
             compteur = 0 
         # si compteur = 0 car aucun tour dans le while => on ne l'affiche pas.
-
     print(f"nombre de départ : {nombre}, décomposition : {resultat}")
     return resultat
-    
+
+
 def exponentiation_modulaire(M:int, e:int, N:int):
     """
         questions associées:
@@ -78,21 +78,25 @@ def exponentiation_modulaire(M:int, e:int, N:int):
     """
     exposants = []
     restes = []
-    e_base2 = format(e, '08b') #l'exposant (45 dans l'exemple) en base 2
-    for position, i in enumerate(e_base2):
-        if i == '1':
-            exposants.append(2 ** (N - position)) # permet d'avoir la décomposition : 45 = 2^^0 * 2^^2 * 2^^3 * 2^^5
+    
+    # On transforme l'exposant en binaire (ex: 45 -> '101101')
+    e_base2 = bin(e)[2:] 
+    taille = len(e_base2)
 
-    # passons aux restes pour chaque exposant
-    for expoz in exposants:
-        restes.append(M**expoz % N)
+    for position, bit in enumerate(e_base2):
+        if bit == '1':
+            # On calcule la puissance de 2 correspondante au bit
+            puissance_de_2 = 2 ** (taille - 1 - position)
+            exposants.append(puissance_de_2) # permet d'avoir la décomposition : 45 = 2^^0 * 2^^2 * 2^^3 * 2^^5
+            
+            restes.append(pow(M, puissance_de_2, N)) # M**expoz % N en + opti
 
     Me_final = 1
-    for x in restes: # on multiplie tous les restes ensembles
-        Me_final *= x
+    for x in restes: 
+        Me_final = (Me_final * x) % N
     
-    print(f"Le reste est : {Me_final % N}\nJustification: 0<= ``{Me_final % N}`` <{N}") # on applique le modulo N (17 dans l'exemple) afin que le reste soit bien >= 0 et < à N | Dans l'exemple : reste = 3 et 0 <= 3 < 17
-    return Me_final % N
+    print(f"Le reste est : {Me_final}\nJustification: 0<= ``{Me_final}`` <{N}") 
+    return Me_final
 
 
 

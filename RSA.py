@@ -27,8 +27,8 @@ def RSA(M:int, n:int, p:int, e:int):
         return False
     
     M_prime = c.exponentiation_modulaire(M, e, N)
-    pgcd, coefs = c.inverse_modulaire_bezout(N, e)
-    d = e*coefs[1]
+    pgcd, coefs = c.inverse_modulaire_bezout(phi_n, e)
+    d = coefs[1] % phi_n #sinon v est négatif
     M_prime_prime = c.exponentiation_modulaire(M_prime, d, N)
     if M == M_prime_prime:
         print("RSA executé", M, M_prime_prime)
@@ -38,7 +38,3 @@ def RSA(M:int, n:int, p:int, e:int):
         return False
 
 RSA(823, 523, 211, 641)
-
-    
-
-
